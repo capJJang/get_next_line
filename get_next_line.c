@@ -6,7 +6,7 @@
 /*   By: segan <segan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 17:23:04 by segan             #+#    #+#             */
-/*   Updated: 2022/09/24 05:26:14 by segan            ###   ########.fr       */
+/*   Updated: 2022/09/24 05:43:43 by segan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char	*get_next_line(int fd)
 		return (return_only_leftover(&leftover));
 	buff = (char *)malloc(BUFFER_SIZE);
 	ret = (char *)malloc(ft_strlen(leftover) + 1);
+	ret[ft_strlen(leftover) + 1] = 0;
 	if (buff == NULL || ret == NULL)
 		return (NULL);
 	ft_strlcpy(ret, leftover, ft_strlen(leftover));
@@ -71,7 +72,6 @@ char	*get_next_line(int fd)
 	return (ret);
 }
 
-/*
 #include <fcntl.h>
 #include <stdio.h>
 
@@ -80,4 +80,3 @@ int	main(void)
 	int fd = open("test.txt", O_RDONLY);
 	printf("%s", get_next_line(fd));
 }
-*/
