@@ -6,31 +6,38 @@
 /*   By: segan <segan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 17:23:04 by segan             #+#    #+#             */
-/*   Updated: 2022/09/20 23:51:32 by segan            ###   ########.fr       */
+/*   Updated: 2022/09/23 05:46:09 by segan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "limits.h"
 
 char	*get_next_line(int fd)
 {
-	static char	buff[BUFFER_SIZE];
-	int			i;
-	int			j;
+	static char	*leftover;
+	char		*buff;
+	char		*ret;
 
-	char	*ret;
-	
-	i = ft_strlen(buff);
-	if (read(fd, buff + i, BUFFER_SIZE - i) <= 0 || fd < 0)
+	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
-	j = 0;
-	while (buff[i] && buff[i] != '\n')
-		i++;
-	ret = ft_substr(buff, 0, i);
-	i++;
-	while (i < BUFFER_SIZE)
-		buff[j++] = buff[i++];
-	buff[i] = 0;
+	if (ft_strchr(leftover, '\n'))
+		return (return_only_leftover(&leftover));
+	buff = (char *)malloc(BUFFER_SIZE);
+	if (buff == NULL)
+		return (NULL);
+	while (1)
+	{
+		if (!read(fd, buff, BUFFER_SIZE))
+			return (NULL);
+		if (!ft_strchr(buff, '\n'))
+			ret = ft_strjoin(leftover, buff);
+		else
+		{
+			ret = ft_strjoin2(&leftover, buff);
+		}
+	}
+	free(buff);
 	return (ret);
 }
 
