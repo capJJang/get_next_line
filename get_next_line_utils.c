@@ -6,7 +6,7 @@
 /*   By: segan <segan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 23:45:15 by segan             #+#    #+#             */
-/*   Updated: 2022/09/23 05:43:50 by segan            ###   ########.fr       */
+/*   Updated: 2022/09/24 05:04:22 by segan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
+	if (s == NULL)
+		return (0);
 	i = 0;
 	while (s[i])
 		i++;
@@ -24,100 +26,60 @@ size_t	ft_strlen(const char *s)
 
 char	*ft_strchr(const char *s, int o)
 {
+	size_t	i;
+
+	i = 0;
 	if (o == 0)
 		return ((char *)s + ft_strlen(s));
-	while (*s)
+	if (s == NULL)
+		return (NULL);
+	while (i < BUFFER_SIZE)
 	{
-		if (*s == (char)o)
-			return ((char *) s);
+		if (s[i] == (char)o)
+			return ((char *)(s + i));
 		else
-			s++;
+			i++;
 	}
 	return ((void *) 0);
 }
 
 char	*return_only_leftover(char **leftover)
 {
+	size_t	ret_len;
+	size_t	new_left_over_len;
+	char	*need_free;
 	char	*ret;
-	char	*new_leftover;
-	size_t	i;
-	size_t	j;
-	size_t	new_leftover_size;
+	char	*new_left_over;
 
-	ret = (char *)malloc(ft_strchr(*leftover, '\n') - *leftover + 1);
+	need_free = *leftover;
+	ret_len = ft_strchr(*leftover, '\n') - *leftover;
+	ret = (char *)malloc(ret_len);
 	if (ret == NULL)
 		return (NULL);
-	i = 0;
-	j = 0;
-	while (1)
-	{
-		if (ft_strchr(leftover[i++], '\n'))
-			break ;
-		ret[i++] = *leftover[j++];
-	}
-	ret[i] = '\n';
-	j = i;
-	new_leftover_size = 0;
-	while (*leftover[i++])
-		new_leftover_size++;
-	new_leftover = (char *)malloc(new_leftover_size + 1);
-	if (new_leftover == NULL)
+	while (*leftover == ft_strchr(*leftover, '\n'))
+		*ret++ = *(*leftover)++;
+	*ret = 0;
+	new_left_over_len = ft_strlen(*leftover);
+	new_left_over = (char *)malloc(new_left_over_len + 1);
+	if (new_left_over == NULL)
 		return (NULL);
-	i = 0;
-	while (j < ft_strlen(*leftover))
-		new_leftover[i++] = *leftover[j++];
-	new_leftover[i] = 0;
-	free(*leftover);
-	*leftover = new_leftover;
+	while (**leftover)
+		*new_left_over++ = *(*leftover)++;
+	*new_left_over = 0;
+	*leftover = new_left_over - new_left_over_len;
+	free(need_free);
+	return (ret - ret_len);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	ret;
+
+	ret = ft_strlen(src);
+	if (dstsize == 0)
+		return (ret);
+	while (dstsize-- > 1 && *src)
+		*dst++ = *src++;
+	*dst = 0;
 	return (ret);
-}
-
-char	*ft_strjoin(char *s1, char const *s2)
-{
-	char	*ptr;
-	size_t	s1_len;
-	size_t	s2_len;
-	size_t	ptr_len;
-
-	s1_len = ft_strlen(s1);
-	s2_len = ft_strlen(s2);
-	ptr_len = s1_len + s2_len;
-	ptr = (char *)malloc(ptr_len + 1);
-	if (ptr == (void *)0)
-		return ((void *)0);
-	while (s1_len--)
-		*ptr++ = *s1++;
-	while (s2_len--)
-		*ptr++ = *s2++;
-	*ptr = 0;
-	return (ptr - ptr_len);
-}
-
-char	*ft_strjoin2(char **s1, char const *s2)
-{
-	char	*ptr;
-	char	*new_leftover;
-	size_t	s1_len;
-	size_t	s2_len;
-	size_t	ptr_len;
-
-	s1_len = ft_strlen(*s1);
-	s2_len = ft_strchr(s2, '\n') - s2;
-	ptr_len = s1_len + s2_len;
-	ptr = (char *)malloc(ptr_len + 1);
-	if (ptr == (void *)0)
-		return ((void *)0);
-	while (s1_len--)
-		*ptr++ = *(*s1)++;
-	while (s2_len--)
-		*ptr++ = *s2++;
-	*ptr = 0;
-	new_leftover = (char *)malloc(ft_strlen(*s1) + 1);
-	if (new_leftover == NULL)
-		return (NULL);
-	while (**s1)
-		*new_leftover++ = *(*s1)++;
-	free(*s1);
-	*s1 = new_leftover;
-	return (ptr - ptr_len);
 }
