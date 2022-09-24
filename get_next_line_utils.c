@@ -6,7 +6,7 @@
 /*   By: segan <segan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 23:45:15 by segan             #+#    #+#             */
-/*   Updated: 2022/09/24 05:04:22 by segan            ###   ########.fr       */
+/*   Updated: 2022/09/25 04:37:50 by segan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,43 +43,21 @@ char	*ft_strchr(const char *s, int o)
 	return ((void *) 0);
 }
 
-char	*return_only_leftover(char **leftover)
-{
-	size_t	ret_len;
-	size_t	new_left_over_len;
-	char	*need_free;
-	char	*ret;
-	char	*new_left_over;
-
-	need_free = *leftover;
-	ret_len = ft_strchr(*leftover, '\n') - *leftover;
-	ret = (char *)malloc(ret_len);
-	if (ret == NULL)
-		return (NULL);
-	while (*leftover == ft_strchr(*leftover, '\n'))
-		*ret++ = *(*leftover)++;
-	*ret = 0;
-	new_left_over_len = ft_strlen(*leftover);
-	new_left_over = (char *)malloc(new_left_over_len + 1);
-	if (new_left_over == NULL)
-		return (NULL);
-	while (**leftover)
-		*new_left_over++ = *(*leftover)++;
-	*new_left_over = 0;
-	*leftover = new_left_over - new_left_over_len;
-	free(need_free);
-	return (ret - ret_len);
-}
-
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
 	size_t	ret;
 
-	ret = ft_strlen(src);
+	ret = 0;
 	if (dstsize == 0)
 		return (ret);
 	while (dstsize-- > 1 && *src)
 		*dst++ = *src++;
 	*dst = 0;
 	return (ret);
+}
+
+void	free_arr(char **arr)
+{
+	free(*arr);
+	*arr = NULL;
 }
