@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: segan <segan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 17:23:04 by segan             #+#    #+#             */
-/*   Updated: 2022/09/29 03:18:40 by segan            ###   ########.fr       */
+/*   Updated: 2022/09/29 03:35:57 by segan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*slicing_line(char *ret, char **leftover, int read_count)
 {
@@ -53,7 +53,7 @@ char	*concat_line(char *ret, char *buff, int read_count)
 	{
 		new_ret = (char *)malloc(ft_strlen(ret) + read_count + 1);
 		if (new_ret == NULL)
-			return (NULL);
+			return (free_arr(&ret));
 	}
 	ft_strlcpy(new_ret, ret, ft_strlen(ret) + 1);
 	ft_strlcpy(new_ret + ft_strlen(ret), buff, read_count + 1);
